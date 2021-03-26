@@ -1,13 +1,13 @@
 import {useState, useRef, useMemo, useCallback, useEffect} from 'react'
 import {convertToRaw, EditorState} from 'draft-js'
 import createMentionPlugin, {defaultSuggestionsFilter} from '@draft-js-plugins/mention'
-import customSuggestionsFilter from './Mention/customerSuggestionsFilter'
+import customSuggestionsFilter from './customerSuggestionsFilter'
 import Editor from '@draft-js-plugins/editor'
 import styled from 'styled-components'
 import '@draft-js-plugins/mention/lib/plugin.css';
-import {getFader} from '../../utils/color'
+import {getFader} from '../utils/color'
 import PropTypes from 'prop-types'
-import MentionSuggestionsComp from './Mention/MentionSuggestions'
+import MentionSuggestionsComp from './MentionSuggestions'
 
 const ItemStyle = props => `
     border-bottom: 1px solid ${props.theme.color.border.primary};

@@ -4,7 +4,7 @@ import createMentionPlugin, {defaultSuggestionsFilter} from '@draft-js-plugins/m
 import Editor from '@draft-js-plugins/editor'
 import styled from 'styled-components'
 import '@draft-js-plugins/mention/lib/plugin.css';
-import {getFader} from '../../utils/color'
+import {getFader} from '../utils/color'
 import PropTypes from 'prop-types'
 
 const ItemStyle = props => `

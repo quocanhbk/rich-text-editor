@@ -1,6 +1,6 @@
 import React, {useRef, useEffect} from 'react'
 import styled from 'styled-components'
-import {getFader} from '../../../../utils/color'
+import {getFader} from '../../utils/color'
 import calendarData from './calendarData'
 
 const StyledSpan = styled.span`
