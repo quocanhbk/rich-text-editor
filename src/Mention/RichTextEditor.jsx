@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Editor, EditorState, RichUtils } from "draft-js";
-import { BoldIcon, ItalicIcon } from "../assets/StyleIcon";
+import { BoldIcon, ItalicIcon, UnderlineIcon } from "../assets/StyleIcon";
 
 const RichTextEditor = () => {
   const [editorState, setEditorState] = useState(() =>
@@ -18,7 +18,6 @@ const RichTextEditor = () => {
 
   const toggleInline = (style) => (e) => {
     e.preventDefault();
-    console.log(style)
     const newState = RichUtils.toggleInlineStyle(editorState, style);
     if (newState) {
       setEditorState(newState);
@@ -27,7 +26,8 @@ const RichTextEditor = () => {
 
   const INLINE_STYLING = [
     { style: 'BOLD', component: <BoldIcon />},
-    { style: 'Italic', component: <ItalicIcon />}
+    { style: 'ITALIC', component: <ItalicIcon />},
+    { style: 'UNDERLINE', component: <UnderlineIcon />}
   ]
 
   return (

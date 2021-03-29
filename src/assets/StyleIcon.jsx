@@ -2,40 +2,34 @@ import React from "react";
 import styled from "styled-components";
 import { ReactComponent as Bold } from "./bold.svg";
 import { ReactComponent as Italic } from "./italic.svg";
+import { ReactComponent as Underline } from "./underline.svg";
 
-const Wrapper = styled.div`
+const Wrapper = styled.button`
   width: 16px;
   height: 16px;
-  fill: #ffffff;
+  fill: ${(props) => props.theme.color.text.primary};
+  background-color: transparent;
+  border: 0;
+  outline: none;
+  cursor: pointer;
 `;
 
-const BoldCursor = styled(Bold)`
-  cursor: url(bold.svg) 2 2, pointer;
-`;
+const BoldIcon = () => (
+  <Wrapper>
+    <Bold />
+  </Wrapper>
+);
 
-const ItalicCursor = styled(Italic)`
-  cursor: url(italic.svg) 2 2, pointer;
-`
+const ItalicIcon = () => (
+  <Wrapper>
+    <Italic />
+  </Wrapper>
+);
 
-const BoldIcon = () => {
-  return (
-    (
-      <Wrapper>
-        <BoldCursor />
-      </Wrapper>
-    )
-  )
-}
+const UnderlineIcon = () => (
+  <Wrapper>
+    <Underline />
+  </Wrapper>
+);
 
-const ItalicIcon = () => {
-  return (
-    (
-      <Wrapper>
-        <ItalicCursor />
-      </Wrapper>
-    )
-  )
-}
-
-// eslint-disable-next-line
-export { BoldIcon, ItalicIcon };
+export { BoldIcon, ItalicIcon, UnderlineIcon };
