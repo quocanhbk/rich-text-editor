@@ -1,6 +1,8 @@
 import styled, { ThemeProvider } from "styled-components";
 import MentionInput from "./Mention/MentionInput";
-import theme from './utils/theme'
+import theme from './utils/theme';
+import RichTextEditor from './Mention/RichTextEditor';
+
 const ComboxData = [
   {id: 1, name: "La Quoc Anh", job: "Staff", display: "La Quoc Anh", avatar: "https://ttgvncom.sharepoint.com/sites/CommandCenter/_layouts/15/UserPhoto.aspx?Size=L&AccountName=anh.lq@ttgvn.com"},
   {id: 2, name: "Tran Thach Thao", job: "Staff", display: "Tran Thach Thao", avatar: "https://ttgvncom.sharepoint.com/sites/CommandCenter/_layouts/15/UserPhoto.aspx?Size=L&AccountName=thao.tt@ttgvn.com"},
@@ -20,6 +22,7 @@ function App() {
     <ThemeProvider theme={theme.dark}>
       <StyledContainer>
         <MentionInput data={ComboxData} />
+        <RichTextEditor />
       </StyledContainer>
     </ThemeProvider>
   );
