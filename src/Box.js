@@ -1,28 +1,24 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 const StyledContainer = styled.div`
-    border: 1px solid ${props => props.theme.color.border.primary};
-    margin-bottom: 1rem;
-`
+  border: 1px solid ${(props) => props.theme.color.border.primary};
+  margin-bottom: 1rem;
+`;
 const StyledHeader = styled.div`
-    padding: 0.4rem;
-    border-bottom:1px solid ${props => props.theme.color.border.primary};
-    background: ${props => props.theme.color.background.secondary};
-`
+  padding: 0.4rem;
+  border-bottom: 1px solid ${(props) => props.theme.color.border.primary};
+  background: ${(props) => props.theme.color.background.secondary};
+`;
 const StyledBody = styled.div`
-    padding: 0.4rem;
-`
+  padding: 0.4rem;
+`;
 const Box = (props) => {
-    return (
-        <StyledContainer>
-            <StyledHeader>
-                {props.headline}
-            </StyledHeader>
-            <StyledBody>
-                {props.children}
-            </StyledBody>
-        </StyledContainer>
-    )
-}
+  return (
+    <StyledContainer>
+      <StyledHeader>{props.headline}</StyledHeader>
+      <StyledBody>{props.children}</StyledBody>
+    </StyledContainer>
+  );
+};
 
-export default Box
+export default Box;

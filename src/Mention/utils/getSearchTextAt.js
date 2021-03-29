@@ -1,4 +1,4 @@
-export default function getSearchTextAt(blockText,position,triggers) {
+export default function getSearchTextAt(blockText, position, triggers) {
   const str = blockText.substr(0, position);
   const { begin, index } = triggers
     .map((trigger, triggerIndex) => ({

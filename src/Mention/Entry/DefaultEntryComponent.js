@@ -1,15 +1,8 @@
-import React, {  } from 'react';
+/* eslint-disable */
+import React from "react";
 
-function DefaultEntryComponent(
-  props
-) {
-  const {
-    mention,
-    theme,
-    isFocused,
-    searchValue,
-    ...parentProps
-  } = props;
+function DefaultEntryComponent(props) {
+  const { mention, theme, isFocused, searchValue, ...parentProps } = props;
 
   return (
     <div {...parentProps}>
@@ -20,4 +13,4 @@ function DefaultEntryComponent(
   );
 }
 
-export default DefaultEntryComponent
+export default DefaultEntryComponent;

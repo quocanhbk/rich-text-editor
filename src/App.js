@@ -1,9 +1,7 @@
 import Display from "./Display";
 
 function App() {
-  return (
-    <Display/>
-  );
+  return <Display />;
 }
 
 export default App;

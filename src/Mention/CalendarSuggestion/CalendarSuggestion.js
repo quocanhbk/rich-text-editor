@@ -1,39 +1,39 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {genKey} from 'draft-js';
-import escapeRegExp from 'lodash/escapeRegExp';
-import addMention from '../modifiers/addMention';
-import decodeOffsetKey from '../utils/decodeOffsetKey';
-import positionSuggestions from '../utils/positionSuggestion'
-import CalendarPopup from './CalendarPopup'
-import styled from 'styled-components'
-import getSearchText from '../utils/getSearchText';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { genKey } from "draft-js";
+import escapeRegExp from "lodash/escapeRegExp";
+import addMention from "../modifiers/addMention";
+import decodeOffsetKey from "../utils/decodeOffsetKey";
+import positionSuggestions from "../utils/positionSuggestion";
+import CalendarPopup from "./CalendarPopup";
+import styled from "styled-components";
+import getSearchText from "../utils/getSearchText";
 
 const StyledPopover = styled.div`
-    border: 0 !important;
-    background: transparent !important;
-    padding: 0 !important;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    transform-origin: 50% 0%;
-    transform: scaleY(0);
-    position: absolute;
-`
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transform-origin: 50% 0%;
+  transform: scaleY(0);
+  position: absolute;
+`;
 
 export class CalendarSuggestion extends Component {
   static propTypes = {
     open: PropTypes.bool.isRequired,
     onOpenChange: PropTypes.func.isRequired,
-    entityMutability: PropTypes.oneOf(['SEGMENTED', 'IMMUTABLE', 'MUTABLE']),
+    entityMutability: PropTypes.oneOf(["SEGMENTED", "IMMUTABLE", "MUTABLE"]),
     entryComponent: PropTypes.func,
-    onAddMention: PropTypes.func
+    onAddMention: PropTypes.func,
   };
 
   state = {
     focusedDate: new Date(),
-    calendarTable: []
+    calendarTable: [],
   };
 
   key = genKey();
@@ -44,41 +44,61 @@ export class CalendarSuggestion extends Component {
   date = new Date();
   constructor(props) {
     super(props);
-    this.date = new Date()
-    this.setState({calendarTable: this.updateCalendarTable()})
-    this.setState({focusedDate: new Date()})
+    this.date = new Date();
+    this.setState({ calendarTable: this.updateCalendarTable() });
+    this.setState({ focusedDate: new Date() });
     this.props.callbacks.onChange = this.onEditorStateChange;
   }
   getDaysInMonth = (m, y) => {
     m += 1;
-    return /8|3|5|10/.test(--m)?30:m===1?(!(y%4)&&y%100)||!(y%400)?29:28:31;
-  }
+    return /8|3|5|10/.test(--m)
+      ? 30
+      : m === 1
+      ? (!(y % 4) && y % 100) || !(y % 400)
+        ? 29
+        : 28
+      : 31;
+  };
   componentDidMount() {
-    this.setState({calendarTable: this.updateCalendarTable()})
+    this.setState({ calendarTable: this.updateCalendarTable() });
   }
   updateCalendarTable = () => {
-    var dayofmonth = []
+    var dayofmonth = [];
     let id = 0;
-    let previousNumDate = this.getDaysInMonth(this.date.getMonth() - 1)
+    let previousNumDate = this.getDaysInMonth(this.date.getMonth() - 1);
     //get day of week of the first day of the month
-    var x = new Date(this.date.getFullYear(),this.date.getMonth(), 1).getDay()
+    var x = new Date(this.date.getFullYear(), this.date.getMonth(), 1).getDay();
 
-    for (var i = 1 - (x + 6 ) % 7; i <= this.getDaysInMonth(this.date.getMonth(), this.date.getFullYear()); i++) {
-        if (i <= 0) { dayofmonth.push({id: id, month: "previous", value: previousNumDate + i}) }
-        else { dayofmonth.push({id: id, month: "current", value: i}) }
-        id++
+    for (
+      var i = 1 - ((x + 6) % 7);
+      i <= this.getDaysInMonth(this.date.getMonth(), this.date.getFullYear());
+      i++
+    ) {
+      if (i <= 0) {
+        dayofmonth.push({
+          id: id,
+          month: "previous",
+          value: previousNumDate + i,
+        });
+      } else {
+        dayofmonth.push({ id: id, month: "current", value: i });
+      }
+      id++;
     }
     for (var j = 0; j < dayofmonth.length % 7; j++) {
-        dayofmonth.push({id: id, month: "next", value: j + 1})
-        id++
+      dayofmonth.push({ id: id, month: "next", value: j + 1 });
+      id++;
     }
-    return dayofmonth
-  }
+    return dayofmonth;
+  };
   swipe = (direction) => {
-    this.date.setMonth(this.date.getMonth() + (direction === "next" ? 1 : -1), 1)
-    this.setState({calendarTable: this.updateCalendarTable()})
-}
-  
+    this.date.setMonth(
+      this.date.getMonth() + (direction === "next" ? 1 : -1),
+      1
+    );
+    this.setState({ calendarTable: this.updateCalendarTable() });
+  };
+
   componentDidUpdate() {
     if (this.popover) {
       // Note: this is a simple protection for the error when componentDidUpdate
@@ -88,19 +108,21 @@ export class CalendarSuggestion extends Component {
       if (!this.props.store.getAllSearches().has(this.activeOffsetKey)) {
         return;
       }
-      const decoratorRect = this.props.store.getPortalClientRect(this.activeOffsetKey)
+      const decoratorRect = this.props.store.getPortalClientRect(
+        this.activeOffsetKey
+      );
       const newStyles = positionSuggestions({
         decoratorRect,
         props: this.props,
         popover: this.popover,
-        inputRef: this.props.inputRef
+        inputRef: this.props.inputRef,
       });
       for (const [key, value] of Object.entries(newStyles)) {
-        (this.popover.style)[key] = value;
+        this.popover.style[key] = value;
       }
     }
   }
-  
+
   componentWillUnmount() {
     this.props.callbacks.onChange = undefined;
   }
@@ -167,7 +189,8 @@ export class CalendarSuggestion extends Component {
               // @ is in the text or at the end, multi triggers
               (this.props.mentionTriggers.length > 1 &&
                 anchorOffset >= start + trigger.length &&
-                (blockText.substr(start + 1, trigger.length) === trigger || blockText.substr(start, trigger.length) === trigger) &&
+                (blockText.substr(start + 1, trigger.length) === trigger ||
+                  blockText.substr(start, trigger.length) === trigger) &&
                 anchorOffset <= end) ||
               // @ is in the text or at the end, single trigger
               (this.props.mentionTriggers.length === 1 &&
@@ -200,7 +223,7 @@ export class CalendarSuggestion extends Component {
 
     // make sure the escaped search is reseted in the cursor since the user
     // already switched to another mention search
-    if (!this.props.store.isEscaped(this.activeOffsetKey || '')) {
+    if (!this.props.store.isEscaped(this.activeOffsetKey || "")) {
       this.props.store.resetEscapedSearch();
     }
 
@@ -209,7 +232,7 @@ export class CalendarSuggestion extends Component {
     // input field and then comes back: the dropdown will show again.
     if (
       !this.props.open &&
-      !this.props.store.isEscaped(this.activeOffsetKey || '')
+      !this.props.store.isEscaped(this.activeOffsetKey || "")
     ) {
       this.openDropdown();
     }
@@ -231,54 +254,68 @@ export class CalendarSuggestion extends Component {
       selection,
       this.props.mentionTriggers
     );
-    console.log(searchValue)
+    console.log(searchValue);
     if (searchValue && this.props.open) {
-      this.closeDropdown()
+      this.closeDropdown();
     }
-    return searchValue
-
+    return searchValue;
   };
   onDownArrow = (keyboardEvent) => {
     keyboardEvent.preventDefault();
-    const newDate = new Date(this.state.focusedDate.getFullYear(), this.state.focusedDate.getMonth(), this.state.focusedDate.getDate() + 7)
+    const newDate = new Date(
+      this.state.focusedDate.getFullYear(),
+      this.state.focusedDate.getMonth(),
+      this.state.focusedDate.getDate() + 7
+    );
     if (newDate.getMonth() !== this.state.focusedDate.getMonth()) {
       //Swipe Next
-      this.swipe('next')
+      this.swipe("next");
     }
-    this.setState({focusedDate: newDate})
+    this.setState({ focusedDate: newDate });
   };
-
 
   onUpArrow = (keyboardEvent) => {
     keyboardEvent.preventDefault();
-    const newDate = new Date(this.state.focusedDate.getFullYear(), this.state.focusedDate.getMonth(), this.state.focusedDate.getDate() - 7)
+    const newDate = new Date(
+      this.state.focusedDate.getFullYear(),
+      this.state.focusedDate.getMonth(),
+      this.state.focusedDate.getDate() - 7
+    );
     if (newDate.getMonth() !== this.state.focusedDate.getMonth()) {
       //Swipe Prev
-      this.swipe('previous')
+      this.swipe("previous");
     }
-    this.setState({focusedDate: newDate})
+    this.setState({ focusedDate: newDate });
   };
 
   onNextArrow = (keyboardEvent) => {
-    keyboardEvent.preventDefault()
-    const newDate = new Date(this.state.focusedDate.getFullYear(), this.state.focusedDate.getMonth(), this.state.focusedDate.getDate() + 1)
+    keyboardEvent.preventDefault();
+    const newDate = new Date(
+      this.state.focusedDate.getFullYear(),
+      this.state.focusedDate.getMonth(),
+      this.state.focusedDate.getDate() + 1
+    );
     if (newDate.getMonth() !== this.state.focusedDate.getMonth()) {
       //Swipe Next
-      this.swipe('next')
+      this.swipe("next");
     }
-    this.setState({focusedDate: newDate})
-  }
+    this.setState({ focusedDate: newDate });
+  };
 
   onPrevArrow = (keyboardEvent) => {
-    keyboardEvent.preventDefault()
+    keyboardEvent.preventDefault();
     // this.closeDropdown()
-    const newDate = new Date(this.state.focusedDate.getFullYear(), this.state.focusedDate.getMonth(), this.state.focusedDate.getDate() - 1)
+    const newDate = new Date(
+      this.state.focusedDate.getFullYear(),
+      this.state.focusedDate.getMonth(),
+      this.state.focusedDate.getDate() - 1
+    );
     if (newDate.getMonth() !== this.state.focusedDate.getMonth()) {
       //Swipe Next
-      this.swipe('prev')
+      this.swipe("prev");
     }
-    this.setState({focusedDate: newDate})
-  }
+    this.setState({ focusedDate: newDate });
+  };
 
   onTab = (keyboardEvent) => {
     keyboardEvent.preventDefault();
@@ -299,12 +336,23 @@ export class CalendarSuggestion extends Component {
     // if (this.props.onAddMention) {
     //   this.props.onAddMention(mention);
     // }
-    const dateString = mention.getDate().toLocaleString(undefined, {minimumIntegerDigits: 2}) + "/" + (mention.getMonth()+1).toLocaleString(undefined, {minimumIntegerDigits: 2}) +  "/" + mention.getFullYear()
+    const dateString =
+      mention.getDate().toLocaleString(undefined, { minimumIntegerDigits: 2 }) +
+      "/" +
+      (mention.getMonth() + 1).toLocaleString(undefined, {
+        minimumIntegerDigits: 2,
+      }) +
+      "/" +
+      mention.getFullYear();
     if (dateString === "01/01/1970") {
-      this.closeDropdown()
-      return
+      this.closeDropdown();
+      return;
     }
-    const dateData = {id: mention.getTime(), name: dateString, value: mention}
+    const dateData = {
+      id: mention.getTime(),
+      name: dateString,
+      value: mention,
+    };
     this.closeDropdown();
 
     const newEditorState = addMention(
@@ -319,11 +367,11 @@ export class CalendarSuggestion extends Component {
 
   commitSelection = () => {
     if (!this.props.store.getIsOpened()) {
-      return 'not-handled';
+      return "not-handled";
     }
 
     this.onMentionSelect(this.state.focusedDate);
-    return 'handled';
+    return "handled";
   };
 
   openDropdown = () => {
@@ -331,9 +379,9 @@ export class CalendarSuggestion extends Component {
     // It assumes that the keyFunctions object will not loose its reference and
     // by this we can replace inner parameters spread over different modules.
     // This better be some registering & unregistering logic. PRs are welcome :)
-    this.date = new Date()
-    this.setState({calendarTable: this.updateCalendarTable()})
-    this.setState({focusedDate: new Date()})
+    this.date = new Date();
+    this.setState({ calendarTable: this.updateCalendarTable() });
+    this.setState({ focusedDate: new Date() });
     this.props.callbacks.handleReturn = this.commitSelection;
     this.props.callbacks.keyBindingFn = (keyboardEvent) => {
       // arrow down
@@ -346,11 +394,11 @@ export class CalendarSuggestion extends Component {
       }
       // arrow next
       if (keyboardEvent.keyCode === 39) {
-        this.onNextArrow(keyboardEvent)
+        this.onNextArrow(keyboardEvent);
       }
       //arror prev
       if (keyboardEvent.keyCode === 37) {
-        this.onPrevArrow(keyboardEvent)
+        this.onPrevArrow(keyboardEvent);
       }
       // escape
       if (keyboardEvent.keyCode === 27) {
@@ -366,7 +414,7 @@ export class CalendarSuggestion extends Component {
     const descendant = `mention-option-${this.key}-${this.state.focusedOptionIndex}`;
     this.props.ariaProps.ariaActiveDescendantID = descendant;
     this.props.ariaProps.ariaOwneeID = `mentions-list-${this.key}`;
-    this.props.ariaProps.ariaHasPopup = 'true';
+    this.props.ariaProps.ariaHasPopup = "true";
     this.props.ariaProps.ariaExpanded = true;
     this.props.onOpenChange(true);
   };
@@ -375,15 +423,15 @@ export class CalendarSuggestion extends Component {
     // make sure none of these callbacks are triggered
     this.props.callbacks.handleReturn = undefined;
     this.props.callbacks.keyBindingFn = undefined;
-    this.props.ariaProps.ariaHasPopup = 'false';
+    this.props.ariaProps.ariaHasPopup = "false";
     this.props.ariaProps.ariaExpanded = false;
     this.props.ariaProps.ariaActiveDescendantID = undefined;
     this.props.ariaProps.ariaOwneeID = undefined;
     this.props.onOpenChange(false);
   };
   setFocusDate = (day) => {
-    this.setState({focusedDate: day})
-  }
+    this.setState({ focusedDate: day });
+  };
   render() {
     if (!this.props.open) {
       return null;
@@ -406,15 +454,15 @@ export class CalendarSuggestion extends Component {
       <StyledPopover />,
       {
         ...elementProps,
-        role: 'listbox',
+        role: "listbox",
         id: `mentions-list-${this.key}`,
         ref: (element) => {
           this.popover = element;
         },
       },
-      <CalendarPopup 
-        onMentionSelect={this.onMentionSelect} 
-        selected={this.state.focusedDate} 
+      <CalendarPopup
+        onMentionSelect={this.onMentionSelect}
+        selected={this.state.focusedDate}
         setSelected={this.setFocusDate}
         calendarTable={this.state.calendarTable}
         swipe={this.swipe}
@@ -424,4 +472,4 @@ export class CalendarSuggestion extends Component {
   }
 }
 
-export default CalendarSuggestion
+export default CalendarSuggestion;

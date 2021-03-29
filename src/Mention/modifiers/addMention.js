@@ -1,6 +1,6 @@
-import { Modifier, EditorState } from 'draft-js';
-import getSearchText from '../utils/getSearchText';
-import getTypeByTrigger from '../utils/getTypeByTrigger';
+import { Modifier, EditorState } from "draft-js";
+import getSearchText from "../utils/getSearchText";
+import getTypeByTrigger from "../utils/getTypeByTrigger";
 
 //Return editor State
 export default function addMention(
@@ -15,7 +15,7 @@ export default function addMention(
     .createEntity(getTypeByTrigger(mentionTrigger), entityMutability, {
       mention,
     });
-  
+
   const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
 
   const currentSelectionState = editorState.getSelection();
@@ -50,14 +50,14 @@ export default function addMention(
     mentionReplacedContent = Modifier.insertText(
       mentionReplacedContent,
       mentionReplacedContent.getSelectionAfter(),
-      ' '
+      " "
     );
   }
 
   const newEditorState = EditorState.push(
     editorState,
     mentionReplacedContent,
-    'insert-fragment'
+    "insert-fragment"
   );
   return EditorState.forceSelection(
     newEditorState,

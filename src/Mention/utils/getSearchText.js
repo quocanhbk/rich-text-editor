@@ -1,4 +1,4 @@
-import getSearchTextAt from './getSearchTextAt';
+import getSearchTextAt from "./getSearchTextAt";
 
 const getSearchText = (editorState, selection, triggers) => {
   const anchorKey = selection.getAnchorKey();
@@ -9,4 +9,4 @@ const getSearchText = (editorState, selection, triggers) => {
   return getSearchTextAt(blockText, anchorOffset, triggers);
 };
 
-export default getSearchText
+export default getSearchText;

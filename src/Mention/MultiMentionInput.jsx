@@ -4,16 +4,16 @@ import React, {
   useMemo,
   useCallback,
   useEffect,
-} from 'react';
-import { convertToRaw, EditorState } from 'draft-js';
-import PropTypes from 'prop-types';
+} from "react";
+import { convertToRaw, EditorState } from "draft-js";
+import PropTypes from "prop-types";
 import createMentionPlugin, {
   defaultSuggestionsFilter,
-} from '@draft-js-plugins/mention';
-import Editor from '@draft-js-plugins/editor';
-import styled from 'styled-components';
-import '@draft-js-plugins/mention/lib/plugin.css';
-import { getFader } from '../../utils/color';
+} from "@draft-js-plugins/mention";
+import Editor from "@draft-js-plugins/editor";
+import styled from "styled-components";
+import "@draft-js-plugins/mention/lib/plugin.css";
+import { getFader } from "../../utils/color";
 
 const ItemStyle = (props) => `
     border-bottom: 1px solid ${props.theme.color.border.primary};
@@ -21,7 +21,7 @@ const ItemStyle = (props) => `
 `;
 
 const Container = styled.div`
-  margin: ${(props) => (props.demo ? '1rem' : '0')};
+  margin: ${(props) => (props.demo ? "1rem" : "0")};
   border: 1px solid ${(props) => props.theme.color.border.primary};
   cursor: text;
   padding: 6px 8px;
@@ -64,12 +64,12 @@ const MentionInput = (props) => {
 
   const { MentionSuggestions1, MentionSuggestions2, plugins } = useMemo(() => {
     const mentionPlugin1 = createMentionPlugin({
-      mentionTrigger: '@',
-      mentionPrefix: '@',
+      mentionTrigger: "@",
+      mentionPrefix: "@",
     });
     const mentionPlugin2 = createMentionPlugin({
-      mentionTrigger: '#',
-      mentionPrefix: '#',
+      mentionTrigger: "#",
+      mentionPrefix: "#",
     });
     const MentionSuggestions1 = mentionPlugin1.MentionSuggestions;
     const MentionSuggestions2 = mentionPlugin2.MentionSuggestions;
@@ -94,7 +94,7 @@ const MentionInput = (props) => {
     let contentState = convertToRaw(editorState.getCurrentContent());
     let models = contentState.entityMap;
     let data = Object.values(models)
-      .filter((_) => _.type === 'mention')
+      .filter((_) => _.type === "mention")
       .map((_) => _.data.mention);
     if (data.length !== mentionLength.current) {
       mentionLength.current = data.length;
@@ -138,7 +138,7 @@ MentionInput.propTypes = {
   getPlainText: PropTypes.func,
 };
 MentionInput.defaultProps = {
-  trigger: '@',
+  trigger: "@",
   data: [],
   getMention: (x) => {},
   getPlainText: (x) => {},

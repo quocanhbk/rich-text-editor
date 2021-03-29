@@ -1,26 +1,22 @@
-import React, {
-  Component
-} from 'react';
-import PropTypes from 'prop-types';
-import {
-  genKey
-} from 'draft-js';
-import Entry from './Entry/Entry';
-import addMention from './modifiers/addMention';
-import decodeOffsetKey from './utils/decodeOffsetKey';
-import getSearchText from './utils/getSearchText';
-import defaultEntryComponent from './Entry/DefaultEntryComponent';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { genKey } from "draft-js";
+import Entry from "./Entry/Entry";
+import addMention from "./modifiers/addMention";
+import decodeOffsetKey from "./utils/decodeOffsetKey";
+import getSearchText from "./utils/getSearchText";
+import defaultEntryComponent from "./Entry/DefaultEntryComponent";
+import styled from "styled-components";
 
 const Popover = styled.div`
   overflow: auto;
-`
+`;
 
 export class MentionSuggestions extends Component {
   static propTypes = {
     open: PropTypes.bool.isRequired,
     onOpenChange: PropTypes.func.isRequired,
-    entityMutability: PropTypes.oneOf(['SEGMENTED', 'IMMUTABLE', 'MUTABLE']),
+    entityMutability: PropTypes.oneOf(["SEGMENTED", "IMMUTABLE", "MUTABLE"]),
     entryComponent: PropTypes.func,
     onAddMention: PropTypes.func,
     suggestions: PropTypes.array.isRequired,
@@ -28,14 +24,14 @@ export class MentionSuggestions extends Component {
 
   state = {
     focusedOptionIndex: 0,
-    focusedElement: null
+    focusedElement: null,
   };
 
   key = genKey();
   popover;
   activeOffsetKey;
   lastSearchValue;
-  lastActiveTrigger = '';
+  lastActiveTrigger = "";
   lastSelectionIsInsideWord;
 
   constructor(props) {
@@ -133,9 +129,12 @@ export class MentionSuggestions extends Component {
     // const x = leaves.filter((leave) => leave !== undefined).map(({ start, end }) => this.props.mentionTriggers
     // .map((trigger) => trigger))
     // alert(x)
-    const triggerForSelectionInsideWord = leaves.filter((leave) => leave !== undefined)
-            .map(({ start, end }) => this.props.mentionTriggers
-              .map((trigger) =>
+    const triggerForSelectionInsideWord = leaves
+      .filter((leave) => leave !== undefined)
+      .map(
+        ({ start, end }) =>
+          this.props.mentionTriggers
+            .map((trigger) =>
               // @ is the first character
               (start === 0 &&
                 blockText.substr(0, trigger.length) === trigger &&
@@ -143,7 +142,8 @@ export class MentionSuggestions extends Component {
               // @ is in the text or at the end, multi triggers
               (this.props.mentionTriggers.length > 1 &&
                 anchorOffset >= start + trigger.length &&
-                (blockText.substr(start + 1, trigger.length) === trigger || blockText.substr(start, trigger.length) === trigger) &&
+                (blockText.substr(start + 1, trigger.length) === trigger ||
+                  blockText.substr(start, trigger.length) === trigger) &&
                 anchorOffset <= end) ||
               // @ is in the text or at the end, single trigger
               (this.props.mentionTriggers.length === 1 &&
@@ -151,10 +151,10 @@ export class MentionSuggestions extends Component {
                 anchorOffset <= end)
                 ? trigger
                 : undefined
-              )
-              .filter((trigger) => trigger !== undefined)[0]
             )
-            .filter((trigger) => trigger !== undefined);
+            .filter((trigger) => trigger !== undefined)[0]
+      )
+      .filter((trigger) => trigger !== undefined);
 
     if (triggerForSelectionInsideWord.isEmpty()) return removeList();
 
@@ -176,7 +176,7 @@ export class MentionSuggestions extends Component {
 
     // make sure the escaped search is reseted in the cursor since the user
     // already switched to another mention search
-    if (!this.props.store.isEscaped(this.activeOffsetKey || '')) {
+    if (!this.props.store.isEscaped(this.activeOffsetKey || "")) {
       this.props.store.resetEscapedSearch();
     }
 
@@ -185,7 +185,7 @@ export class MentionSuggestions extends Component {
     // input field and then comes back: the dropdown will show again.
     if (
       !this.props.open &&
-      !this.props.store.isEscaped(this.activeOffsetKey || '')
+      !this.props.store.isEscaped(this.activeOffsetKey || "")
     ) {
       this.openDropdown();
     }
@@ -251,14 +251,14 @@ export class MentionSuggestions extends Component {
   onEscape = (keyboardEvent) => {
     keyboardEvent.preventDefault();
 
-    this.props.store.escapeSearch(this.activeOffsetKey || '');
+    this.props.store.escapeSearch(this.activeOffsetKey || "");
     this.closeDropdown();
 
     // to force a re-render of the outer component to change the aria props
     this.props.store.setEditorState(this.props.store.getEditorState());
   };
 
-  onMentionSelect = mention => {
+  onMentionSelect = (mention) => {
     // Note: This can happen in case a user typed @xxx (invalid mention) and
     // then hit Enter. Then the mention will be undefined.
     if (!mention) {
@@ -274,7 +274,7 @@ export class MentionSuggestions extends Component {
       this.props.store.getEditorState(),
       mention,
       this.props.mentionPrefix,
-      this.lastActiveTrigger || '',
+      this.lastActiveTrigger || "",
       this.props.entityMutability
     );
     this.props.store.setEditorState(newEditorState);
@@ -286,18 +286,18 @@ export class MentionSuggestions extends Component {
     this.setState({
       focusedOptionIndex: index,
     });
-    console.log("wowowowowo")
+    console.log("wowowowowo");
     // to force a re-render of the outer component to change the aria props
     this.props.store.setEditorState(this.props.store.getEditorState());
   };
 
   commitSelection = () => {
     if (!this.props.store.getIsOpened()) {
-      return 'not-handled';
+      return "not-handled";
     }
 
     this.onMentionSelect(this.props.suggestions[this.state.focusedOptionIndex]);
-    return 'handled';
+    return "handled";
   };
 
   openDropdown = () => {
@@ -329,7 +329,7 @@ export class MentionSuggestions extends Component {
     const descendant = `mention-option-${this.key}-${this.state.focusedOptionIndex}`;
     this.props.ariaProps.ariaActiveDescendantID = descendant;
     this.props.ariaProps.ariaOwneeID = `mentions-list-${this.key}`;
-    this.props.ariaProps.ariaHasPopup = 'true';
+    this.props.ariaProps.ariaHasPopup = "true";
     this.props.ariaProps.ariaExpanded = true;
     this.props.onOpenChange(true);
   };
@@ -338,7 +338,7 @@ export class MentionSuggestions extends Component {
     // make sure none of these callbacks are triggered
     this.props.callbacks.handleReturn = undefined;
     this.props.callbacks.keyBindingFn = undefined;
-    this.props.ariaProps.ariaHasPopup = 'false';
+    this.props.ariaProps.ariaHasPopup = "false";
     this.props.ariaProps.ariaExpanded = false;
     this.props.ariaProps.ariaActiveDescendantID = undefined;
     this.props.ariaProps.ariaOwneeID = undefined;
@@ -361,7 +361,7 @@ export class MentionSuggestions extends Component {
       callbacks,
       theme = {},
       store,
-      entityMutability, 
+      entityMutability,
       positionSuggestions,
       mentionTriggers,
       mentionPrefix,
@@ -373,7 +373,7 @@ export class MentionSuggestions extends Component {
       {
         ...elementProps,
         className: theme.mentionSuggestions,
-        role: 'listbox',
+        role: "listbox",
         id: `mentions-list-${this.key}`,
         ref: (element) => {
           this.popover = element;
