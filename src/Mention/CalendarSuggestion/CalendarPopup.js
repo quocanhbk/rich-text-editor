@@ -10,14 +10,14 @@ const StyledSpan = styled.span`
     }
 `;
 
-const IcoChevronLeft = (props) => <StyledSpan {...props}><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg></StyledSpan>
-const IcoChevronRight = (props) => <StyledSpan {...props}><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg></StyledSpan>
+const IcoChevronLeft = (props) => <StyledSpan {...props}><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg></StyledSpan>
+const IcoChevronRight = (props) => <StyledSpan {...props}><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg></StyledSpan>
 
 const StyledCalendar = styled.div`
     position: block;
     z-index: 999;
     width: 240px;
-    border: 1px solid #ccc;
+    border: 1px solid ${props => props.theme.color.border.primary};
     border-radius: 8px;
     overflow: hidden;
     transition: all 1s linear;
@@ -66,6 +66,7 @@ const StyledLi = styled.li`
     font-size: ${props => props.theme.textSize.small};
     cursor: pointer;
     user-select: none;
+    transition: all 0.1s ease-out;
     &.date-item {
         background: ${props => props.selected ? props.theme.color.fill.primary : "transparent"};
         color: ${props => props.selected ? props.theme.color.background.primary : props => props.current ? props.theme.color.text.primary : getFader(props.theme.color.text.primary, 0.6)};

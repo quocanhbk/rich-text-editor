@@ -56,7 +56,7 @@ const CustomMentionInput = (props) => {
     const {DateSuggestions, MentionSuggestions , plugins} = useMemo(() => {
         const datePlugin = createMentionPlugin({
             entityMutability: "IMMUTABLE", 
-            mentionTrigger: "#", 
+            mentionTrigger: "/", 
             mentionSuggestionsComponent: CalendarSuggestion
         })
         const DateSuggestions = datePlugin.MentionSuggestions
