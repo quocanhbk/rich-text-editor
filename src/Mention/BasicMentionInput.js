@@ -56,8 +56,7 @@ const BasicMentionInput = (props) => {
     const {MentionSuggestions, plugins} = useMemo(() => {
         const mentionPlugin = createMentionPlugin({
             entityMutability: "SEGMENTED", 
-            mentionTrigger: "@", 
-            mentionSuggestionsComponent: MentionSuggestionsComp
+            mentionTrigger: "@"
         })
         const {MentionSuggestions} = mentionPlugin
         const plugins = [mentionPlugin]
