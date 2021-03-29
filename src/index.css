@@ -19,5 +19,5 @@ code {
 }
 
 .toggled {
-  fill: darkgoldenrod;
+  background-color: darkgoldenrod;
 }

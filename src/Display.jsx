@@ -107,7 +107,7 @@ function Display() {
           <Box headline="Long Popup Mention Input (use @)">
             <BasicMentionInput data={ComboxData} />
           </Box>
-          <Box>
+          <Box headline="Rich Text Editor">
             <RichTextEditor />
           </Box>
         </div>
