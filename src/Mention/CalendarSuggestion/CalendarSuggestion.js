@@ -78,6 +78,7 @@ export class CalendarSuggestion extends Component {
     this.date.setMonth(this.date.getMonth() + (direction === "next" ? 1 : -1), 1)
     this.setState({calendarTable: this.updateCalendarTable()})
 }
+  
   componentDidUpdate() {
     if (this.popover) {
       // Note: this is a simple protection for the error when componentDidUpdate
@@ -99,7 +100,7 @@ export class CalendarSuggestion extends Component {
       }
     }
   }
-
+  
   componentWillUnmount() {
     this.props.callbacks.onChange = undefined;
   }
@@ -228,8 +229,9 @@ export class CalendarSuggestion extends Component {
     const { matchingString: searchValue } = getSearchText(
       editorState,
       selection,
-      this.props.mentionTrigger
+      this.props.mentionTriggers
     );
+    console.log(searchValue)
     if (searchValue && this.props.open) {
       this.closeDropdown()
     }
@@ -309,7 +311,7 @@ export class CalendarSuggestion extends Component {
       this.props.store.getEditorState(),
       dateData,
       this.props.mentionPrefix,
-      this.props.mentionTrigger,
+      this.props.mentionTriggers,
       this.props.entityMutability
     );
     this.props.store.setEditorState(newEditorState);
